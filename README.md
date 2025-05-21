@@ -1,38 +1,32 @@
-# Processeur de Texte : Résumé & Traduction (Projet 3)
+# Projet 3 : Processeur de Texte (Résumé & Traduction)
 
-Ce projet est une application web développée avec Streamlit qui permet aux utilisateurs de :
-1.  Générer un résumé concis d'un texte fourni.
-2.  Traduire le texte original vers plusieurs langues, avec détection automatique de la langue source.
+**Binôme : 7**
+**Projet réalisé par :**
+* EL GHIOUAN ISRAE
+* BENCHERAIK ABDESSAMAD
 
-Il s'agit d'une démonstration d'un pipeline de Deep Learning de bout en bout, de la sélection des modèles pré-entraînés à leur déploiement dans une application interactive.
-
-**Réalisé par (Binôme 7):**
-*   Israe EL GHIOUAN
-*   Abdessamad BENCHERAIK
+## Description du Projet
+Application web Streamlit permettant aux utilisateurs de résumer des textes et les traduire vers différentes langues avec détection automatique de la langue source. Ce projet démontre un pipeline de Deep Learning complet, de la sélection des modèles à leur déploiement dans une interface interactive.
 
 ## Fonctionnalités
+* **Résumé de Texte :** Modèle `facebook/bart-large-cnn` de Hugging Face
+* **Traduction :** Modèles `Helsinki-NLP/opus-mt-...` de Hugging Face
+* **Détection de Langue :** Identification automatique de la langue source
+* **Interface Interactive :** Expérience utilisateur simple avec Streamlit
 
-*   **Résumé de Texte :** Utilise le modèle `facebook/bart-large-cnn` de Hugging Face Transformers.
-*   **Traduction de Texte :** Utilise divers modèles `Helsinki-NLP/opus-mt-...` de Hugging Face Transformers.
-*   **Détection Automatique de la Langue Source :** Utilise la bibliothèque `langdetect` pour identifier la langue du texte d'entrée avant la traduction.
-*   **Interface Utilisateur Interactive :** Construite avec Streamlit pour une expérience utilisateur simple et directe.
-*   **Personnalisation CSS :** Amélioration de la lisibilité en mode sombre.
-
-
-## Démo en Ligne
-
-[Lien vers la Démo Streamlit Déployée - À AJOUTER ICI]
-
-## Vidéo de simulatuon
-Video : google drive link
+## Livrables
+- **Démo fonctionnelle** : [Lien vers l'application Streamlit déployée](https://projet3-dl-texte-bout-en-bout.streamlit.app/)
+- **Google Drive** contenant :
+  1. Document Word ( pages)
+  2. Vidéo de présentation ( minutes) : [Lien](https://drive.google.com/file/d/1abcXYZ123)
+  3. Ce dépôt GitHub avec code source et documentation
+  
+  **Lien Google Drive** : [https://drive.google.com/drive/folders/1xYZ123ABC](https://drive.google.com/drive/folders/1xYZ123ABC)
 
 ## Captures d'Écran
 
-*(Insérez ici vos captures d'écran. Vous pouvez les ajouter dans un sous-dossier `images/` et les lier ici.)*
-
 **Exemple d'interface principale :**
-<!-- ![Interface Principale](images/screenshot_main.png) -->
-*Décommentez et remplacez par votre capture d'écran*
+[Interface Principale](images/c1.png)
 
 **Exemple de résumé généré :**
 <!-- ![Résumé Généré](images/screenshot_summary.png) -->
@@ -43,9 +37,11 @@ Video : google drive link
 *Décommentez et remplacez par votre capture d'écran*
 
 
-## Installation et Exécution Locale
-
-Suivez ces étapes pour exécuter l'application sur votre machine locale :
+## Installation et Exécution
+1. **Cloner le dépôt :**
+   ```bash
+   git clone https://github.com/username/text-processor-app.git
+   cd text-processor-app
 
 1.  **Cloner le dépôt (si ce n'est pas déjà fait) :**
     ```bash
@@ -84,9 +80,3 @@ Suivez ces étapes pour exécuter l'application sur votre machine locale :
 *   **PyTorch :** Backend pour les modèles Transformers.
 *   **SentencePiece :** Utilisé par les tokenizers de certains modèles Transformers.
 *   **Langdetect :** Pour la détection de la langue source du texte.
-
-## Déploiement
-
-Cette application peut être facilement déployée sur [Streamlit Community Cloud](https://streamlit.io/cloud) en liant ce dépôt GitHub.
-
----
