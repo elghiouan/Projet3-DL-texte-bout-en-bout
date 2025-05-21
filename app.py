@@ -192,6 +192,6 @@ st.markdown(f"""
 <div style="text-align: center; padding: 10px; font-size: 0.9em;">
     <p style="margin-bottom: 2px;">Projet 3 - End-to-End Deep Learning - Binôme 7</p>
     <p style="margin-bottom: 2px;">Réalisé par : <strong>Israe EL GHIOUAN</strong> & <strong>Abdessamad BENCHERAIK</strong></p>
-    <p><a href="[VOTRE_LIEN_GITHUB_ICI]" target="_blank">Voir le code source sur GitHub</a></p>
+    <p><a href="https://github.com/elghiouan/Projet3-DL-texte-bout-en-bout/" target="_blank">Voir le code source sur GitHub</a></p>
 </div>
 """, unsafe_allow_html=True)
