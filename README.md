@@ -27,7 +27,7 @@ Application web Streamlit permettant aux utilisateurs de résumer des textes et 
 ## Captures d'Écran
 
 **Exemple d'interface principale :**
-<kbd> ![Interface Principale](/images/c1.png) </kbd>
+![Interface Principale](/images/c1.png)
 
 **Exemple de résumé généré :**
 <kbd> ![Résumé Généré](/images/c2.png) </kbd>
