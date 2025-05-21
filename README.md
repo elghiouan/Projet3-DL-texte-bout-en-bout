@@ -1,6 +1,7 @@
 # Projet 3 : Processeur de Texte (Résumé & Traduction)
 
 **Binôme : 7**
+
 **Projet réalisé par :**
 * EL GHIOUAN ISRAE
 * BENCHERAIK ABDESSAMAD
