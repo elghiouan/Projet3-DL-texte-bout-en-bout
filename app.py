@@ -7,65 +7,8 @@ from langdetect import detect, DetectorFactory, LangDetectException # Pour la d�
 # Assurer la reproductibilité pour langdetect (optionnel mais bonne pratique)
 DetectorFactory.seed = 0
 
-# --- Application Principale ---
+# --- Configuration de la Page (DOIT ÊTRE LA PREMIÈRE COMMANDE STREAMLIT) ---
 st.set_page_config(page_title="Processeur de Texte", layout="wide", page_icon="✍️")
-
-# --- CSS Personnalisé pour des couleurs plus vives en mode sombre ---
-custom_css = """
-<style>
-    /* Rendre le texte général un peu plus clair */
-    body .stApp {
-        color: #E0E0E0; /* Gris clair au lieu du blanc pur pour éviter d'être trop criard */
-    }
-
-    /* Titres principaux */
-    h1, h2 {
-        color: #C5CAE9; /* Bleu lavande clair */
-    }
-    h3 {
-       color: #B3E5FC; /* Cyan clair */
-    }
-
-
-    /* Améliorer la lisibilité des messages st.info, st.success, st.warning, st.error */
-    .stAlert > div[role="alert"] {
-        color: #FFFFFF !important; /* Texte blanc dans les alertes */
-        background-color: rgba(255, 255, 255, 0.1) !important; /* Fond légèrement transparent */
-    }
-    .stAlert[data-baseweb="notification"][data-kind="info"] {
-        background-color: #2E4053 !important; /* Bleu foncé pour info */
-        border-left: 5px solid #5DADE2 !important;
-    }
-    .stAlert[data-baseweb="notification"][data-kind="success"] {
-        background-color: #1E4D2B !important; /* Vert foncé pour success */
-        border-left: 5px solid #58D68D !important;
-    }
-    .stAlert[data-baseweb="notification"][data-kind="warning"] {
-        background-color: #5D4037 !important; /* Marron foncé pour warning */
-        border-left: 5px solid #F5B041 !important;
-    }
-    .stAlert[data-baseweb="notification"][data-kind="error"] {
-        background-color: #5E3530 !important; /* Rouge foncé pour error */
-        border-left: 5px solid #EC7063 !important;
-    }
-
-    /* Améliorer le texte dans les zones de texte désactivées (résultats) */
-    .stTextArea textarea[disabled] {
-        background-color: rgba(70, 70, 90, 0.5) !important; /* Fond légèrement plus clair pour le résultat */
-        color: #F0F0F0 !important; /* Texte du résultat plus clair */
-        border: 1px solid #4A4A6A !important;
-    }
-    
-    /* Améliorer le placeholder des text_area */
-    .stTextArea textarea::placeholder {
-        color: #A0A0B0 !important;
-    }
-
-    
-</style>
-"""
-st.markdown(custom_css, unsafe_allow_html=True)
-
 
 # --- Chargement des Modèles (mis en cache pour la performance) ---
 @st.cache_resource
@@ -89,13 +32,13 @@ def charger_traducteur(nom_modele="Helsinki-NLP/opus-mt-en-fr"):
         print(f"AVERTISSEMENT: Impossible de charger le modèle de traduction {nom_modele}: {e}")
         return None
 
-
+# --- Application Principale ---
 st.title("✍️ Processeur de Texte : Résumé & Traduction")
 st.markdown("""
 Bienvenue sur Processeur de Texte !
 1. Entrez votre texte dans la zone ci-dessous.
-2. Obtenez un résumé concis.
-3. Traduisez le texte original vers différentes langues.
+2. Obtenez un résumé concis (optimisé pour l'anglais).
+3. Traduisez le texte original vers différentes langues (la langue source sera auto-détectée).
 """)
 
 # --- Charger les modèles ---
@@ -113,7 +56,7 @@ col1, col2 = st.columns(2)
 with col1:
     st.subheader("📜 Résumé du Texte")
     if resumeur:
-        st.info("ℹ️ Le modèle de résumé actuel (`facebook/bart-large-cnn`).")
+        st.info("ℹ️ Le modèle de résumé (`facebook/bart-large-cnn`) est optimisé pour l'anglais.")
         if st.button("Générer le résumé", key="bouton_resumer", use_container_width=True):
             texte_a_resumer = texte_original.strip()
             if texte_a_resumer:
@@ -122,7 +65,7 @@ with col1:
                         nb_mots = len(texte_a_resumer.split())
                         
                         if nb_mots == 0:
-                            final_min_len = 1; final_max_len = 5
+                            final_min_len = 1; final_max_len = 5 # Valeurs par défaut pour éviter erreur
                             st.text_area("Résumé :", value="Texte d'entrée vide.", height=150, disabled=True, key="resume_output_vide")
                         else:
                             if nb_mots < 20:
@@ -151,10 +94,10 @@ with col1:
                                 st.text_area("Résumé :", value=resultat_resume[0]['summary_text'], height=150, disabled=True, key="resume_output")
                             else:
                                 st.error("Impossible de générer le résumé.")
-                                st.json(resultat_resume)
+                                st.json(resultat_resume) # Pour débogage
                     except Exception as e:
                         st.error(f"Une erreur est survenue lors du résumé : {e}")
-                        st.text(traceback.format_exc())
+                        st.text(traceback.format_exc()) # Pour débogage
             else:
                 st.warning("Veuillez d'abord saisir du texte à résumer.")
     else:
@@ -164,21 +107,17 @@ with col1:
 with col2:
     st.subheader("🌐 Traduction du Texte Original")
 
-    # Définition des langues supportées pour la traduction (codes ISO 639-1)
-    # Ces codes doivent correspondre à ceux utilisés par les modèles Helsinki-NLP
     langues_helsinki_supportees = {
         "Anglais": "en", "Français": "fr", "Espagnol": "es", "Allemand": "de", 
         "Italien": "it", "Russe": "ru", "Chinois (Simplifié)": "zh", 
         "Japonais": "jap", "Arabe": "ar", "Hindi": "hi", "Portugais": "pt"
     }
 
-    # Selectbox pour la langue cible uniquement
     langue_cible_selectionnee_affichage = st.selectbox(
         "Traduire vers :", options=list(langues_helsinki_supportees.keys()), index=0, key="langue_cible_select"
     )
     code_langue_cible = langues_helsinki_supportees[langue_cible_selectionnee_affichage]
 
-    # Espace pour afficher la langue détectée
     langue_detectee_placeholder = st.empty()
 
     if st.button("Traduire le texte", key="bouton_traduire", use_container_width=True):
@@ -188,34 +127,26 @@ with col2:
             nom_langue_source_affichee = "Inconnue"
             try:
                 lang_code_detecte = detect(texte_a_traduire)
-                # Essayer de mapper le code détecté à nos noms de langue pour l'affichage
-                # et vérifier si c'est une langue source supportée par nos modèles Helsinki-NLP
                 for nom, code_iso in langues_helsinki_supportees.items():
-                    # Certains modèles Helsinki utilisent des codes légèrement différents (ex: 'jap' vs 'ja')
-                    # langdetect retourne les codes ISO 639-1 standards ('ja', 'zh-cn', etc.)
-                    # Pour simplifier, nous allons juste vérifier si le début du code détecté correspond
                     if lang_code_detecte.startswith(code_iso) or \
                        (code_iso == 'jap' and lang_code_detecte == 'ja') or \
-                       (code_iso == 'zh' and lang_code_detecte.startswith('zh')): # 'zh' pour 'zh-cn', 'zh-tw'
-                        code_langue_source = code_iso # Utiliser le code Helsinki
+                       (code_iso == 'zh' and lang_code_detecte.startswith('zh')):
+                        code_langue_source = code_iso
                         nom_langue_source_affichee = nom
                         break
                 
                 if code_langue_source:
                     langue_detectee_placeholder.info(f"Langue source détectée : **{nom_langue_source_affichee}** ({code_langue_source})")
                 else:
-                    langue_detectee_placeholder.warning(f"Langue détectée : '{lang_code_detecte}'. Traduction depuis cette langue non directement supportée par les modèles pré-sélectionnés. Tentative avec 'en' comme source si possible.")
-                    # Fallback sur l'anglais si la détection échoue ou n'est pas dans notre liste directe
-                    # Ce fallback est discutable, on pourrait aussi afficher une erreur.
-                    # Pour l'instant, on ne force pas de fallback, l'utilisateur doit savoir.
-                    st.error(f"Impossible de trouver un modèle de traduction direct pour la langue source '{lang_code_detecte}'.")
-
+                    # Message plus neutre si la langue détectée n'est pas dans notre liste pour la traduction directe
+                    langue_detectee_placeholder.warning(f"Langue détectée : '{lang_code_detecte}'. Ce couple de traduction n'est peut-être pas directement supporté.")
+                    # On ne met pas st.error ici car on veut que l'utilisateur puisse voir ce message avant que le code_langue_source soit None et bloque la suite
 
             except LangDetectException:
                 langue_detectee_placeholder.error("Impossible de détecter la langue source. Le texte est peut-être trop court ou ambigu.")
-                code_langue_source = None # Indique un échec de détection
+                code_langue_source = None 
 
-            if code_langue_source: # Procéder uniquement si la langue source est identifiée et supportée
+            if code_langue_source: 
                 if code_langue_source == code_langue_cible:
                     st.warning("La langue source détectée et la langue cible sont identiques !")
                 else:
@@ -235,25 +166,32 @@ with col2:
                                                  value=resultat_traduction[0]['translation_text'], height=150, 
                                                  disabled=True, key="traduction_output")
                                 else:
-                                    st.error(f"Impossible de traduire le texte avec le modèle {nom_modele_traduction}. Format inattendu ou modèle non supporté (le couple de langues {code_langue_source}-{code_langue_cible} n'existe peut-être pas).")
-                                    st.json(resultat_traduction)
+                                    st.error(f"Impossible de traduire le texte avec le modèle {nom_modele_traduction}. Le couple de langues {code_langue_source}-{code_langue_cible} n'existe peut-être pas ou le format de sortie est inattendu.")
+                                    st.json(resultat_traduction) # Pour débogage
                             except Exception as e:
                                 st.error(f"Une erreur est survenue lors de la traduction ({nom_modele_traduction}) : {e}")
-                                st.text(traceback.format_exc())
+                                st.text(traceback.format_exc()) # Pour débogage
                     else:
                         st.error(f"Le modèle de traduction pour {nom_langue_source_affichee} ({code_langue_source}) vers {langue_cible_selectionnee_affichage} ({code_langue_cible}) n'a pas pu être chargé. Ce couple de langues n'est peut-être pas disponible.")
-            # else:
-                # Message d'erreur déjà géré par la logique de détection de langue
+            elif texte_a_traduire and not code_langue_source and not isinstance(langue_detectee_placeholder.exception, LangDetectException):
+                # Ce cas couvre si lang_code_detecte a été trouvé mais pas mappé à nos code_iso supportés.
+                # Le message st.warning précédent est déjà affiché par langue_detectee_placeholder.
+                # On peut ajouter un st.error plus général si on veut bloquer explicitement ici.
+                # Pour l'instant, on ne fait rien de plus, la condition `if code_langue_source:` empêchera la traduction.
+                pass
+
 
         else:
             st.warning("Veuillez d'abord saisir du texte à traduire.")
 
 # --- Pied de Page (Footer) ---
-st.markdown("---")
+st.markdown("---") # Ligne de séparation
+# Pour le pied de page, on peut utiliser du HTML simple pour le centrage
+# sans avoir besoin d'une classe CSS dédiée si on supprime tout le CSS.
 st.markdown(f"""
-<div class="footer-text" style="text-align: center; padding: 10px; font-size: 1em;">
-    <p>Projet 3 - End-to-End Deep Learning - Binôme 7</p>
-    <p>Réalisé par : <strong>Israe EL GHIOUAN</strong> & <strong>Abdessamad BENCHERAIK</strong></p>
-    <p><a href="#" target="_blank">Voir le code source sur GitHub</a></p>
+<div style="text-align: center; padding: 10px; font-size: 0.9em;">
+    <p style="margin-bottom: 2px;">Projet 3 - End-to-End Deep Learning - Binôme 7</p>
+    <p style="margin-bottom: 2px;">Réalisé par : <strong>Israe EL GHIOUAN</strong> & <strong>Abdessamad BENCHERAIK</strong></p>
+    <p><a href="[VOTRE_LIEN_GITHUB_ICI]" target="_blank">Voir le code source sur GitHub</a></p>
 </div>
 """, unsafe_allow_html=True)
