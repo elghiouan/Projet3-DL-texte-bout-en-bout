@@ -176,8 +176,11 @@ with col2:
             st.warning("Veuillez d'abord saisir du texte à traduire.")
 
 # --- Pied de Page (Footer) ---
-st.markdown("---") 
-
-st.caption("Projet 3 - End-to-End Deep Learning - Binôme 7")
-st.caption(f"Réalisé par : **Israe EL GHIOUAN** & **Abdessamad BENCHERAIK**")
-st.markdown(f'<p style="font-size: 0.9em; text-align: center;"><a href="[VOTRE_LIEN_GITHUB_ICI]" target="_blank">Voir le code source sur GitHub</a></p>', unsafe_allow_html=True)
+st.markdown("---") # Ligne de séparation
+st.markdown(f"""
+<div style="text-align: center; padding: 10px; font-size: 0.9em;">
+    <p style="margin-bottom: 2px;">Projet 3 - End-to-End Deep Learning - Binôme 7</p>
+    <p style="margin-bottom: 2px;">Réalisé par : <strong>Israe EL GHIOUAN</strong> & <strong>Abdessamad BENCHERAIK</strong></p>
+    <p><a href="[VOTRE_LIEN_GITHUB_ICI]" target="_blank">Voir le code source sur GitHub</a></p>
+</div>
+""", unsafe_allow_html=True)
