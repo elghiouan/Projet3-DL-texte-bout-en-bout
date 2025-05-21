@@ -30,12 +30,10 @@ Application web Streamlit permettant aux utilisateurs de résumer des textes et 
 ![Interface Principale](/images/c1.png)
 
 **Exemple de résumé généré :**
-<!-- ![Résumé Généré](images/screenshot_summary.png) -->
-*Décommentez et remplacez par votre capture d'écran*
+![Résumé Généré](/images/c2.png)
 
 **Exemple de traduction :**
-<!-- ![Traduction Effectuée](images/screenshot_translation.png) -->
-*Décommentez et remplacez par votre capture d'écran*
+![Traduction Effectuée](/images/c3.png)
 
 ## Bibliothèques Principales Utilisées
 
