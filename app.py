@@ -7,9 +7,8 @@ from langdetect import detect, DetectorFactory, LangDetectException # Pour la d�
 # Assurer la reproductibilité pour langdetect (optionnel mais bonne pratique)
 DetectorFactory.seed = 0
 
-# --- Configuration de la Page (DOIT ÊTRE LA PREMIÈRE COMMANDE STREAMLIT) ---
+# --- Configuration de la Page ---
 st.set_page_config(page_title="Processeur de Texte", layout="wide", page_icon="✍️")
-
 
 # --- Chargement des Modèles (mis en cache pour la performance) ---
 @st.cache_resource
@@ -66,28 +65,21 @@ with col1:
                         nb_mots = len(texte_a_resumer.split())
                         
                         if nb_mots == 0:
-                            # final_min_len = 1; final_max_len = 5 # Non utilisé si on n'appelle pas resumeur
                             st.text_area("Résumé :", value="Texte d'entrée vide.", height=150, disabled=True, key="resume_output_vide")
                         else:
-                            # Nouvelle logique pour min_length et max_length (basée sur la discussion précédente)
-                            if nb_mots < 50: # Pour les textes plus courts
+                            if nb_mots < 50: 
                                 final_min_len = max(10, int(nb_mots * 0.3))
                                 final_max_len = max(final_min_len + 10, int(nb_mots * 0.7))
-                            else: # Pour les textes plus longs
-                                final_min_len = max(50, int(nb_mots * 0.15)) # Au moins 50 mots ou 15%
-                                final_max_len = min(200, max(final_min_len + 30, int(nb_mots * 0.5))) # Max 200 mots, ou 50%
+                            else: 
+                                final_min_len = max(50, int(nb_mots * 0.15)) 
+                                final_max_len = min(200, max(final_min_len + 30, int(nb_mots * 0.5)))
 
-                            # --- Ajustements de sécurité critiques ---
                             final_min_len = max(1, final_min_len)
-                            # max_length doit être > min_length et assez grand pour les tokens spéciaux
                             final_max_len = max(final_min_len + 3, final_max_len, 5) 
-                            if final_min_len >= final_max_len: # Ultime vérification
+                            if final_min_len >= final_max_len: 
                                 final_min_len = max(1, int(final_max_len / 2))
-                                # S'assurer que max_len est toujours plus grand
                                 final_max_len = max(final_min_len + 3, final_max_len, 5)
-                            # --- Fin des ajustements de sécurité ---
 
-                            # Décommenter pour le débogage des longueurs
                             # st.caption(f"DEBUG - Résumé: nb_mots={nb_mots}, min_len={final_min_len}, max_len={final_max_len}")
                             
                             resultat_resume = resumeur(texte_a_resumer, 
@@ -100,10 +92,10 @@ with col1:
                                 st.text_area("Résumé :", value=resultat_resume[0]['summary_text'], height=150, disabled=True, key="resume_output")
                             else:
                                 st.error("Impossible de générer le résumé. Le format de sortie est peut-être inattendu.")
-                                st.json(resultat_resume) # Pour débogage
+                                st.json(resultat_resume)
                     except Exception as e:
                         st.error(f"Une erreur est survenue lors du résumé : {e}")
-                        st.text(traceback.format_exc()) # Pour débogage
+                        st.text(traceback.format_exc())
             else:
                 st.warning("Veuillez d'abord saisir du texte à résumer.")
     else:
@@ -161,7 +153,7 @@ with col2:
                         with st.spinner(f"Traduction de '{nom_langue_source_affichee}' vers '{langue_cible_selectionnee_affichage}'... veuillez patienter."):
                             try:
                                 nb_mots_trad = len(texte_a_traduire.split())
-                                trad_max_len = min(512, max(30, nb_mots_trad * 4)) # Limite typique des modèles Helsinki
+                                trad_max_len = min(512, max(30, nb_mots_trad * 4))
                                 resultat_traduction = traducteur_specifique(texte_a_traduire, max_length=trad_max_len)
                                 
                                 if resultat_traduction and isinstance(resultat_traduction, list) and len(resultat_traduction) > 0 and "translation_text" in resultat_traduction[0]:
@@ -177,10 +169,7 @@ with col2:
                                 st.text(traceback.format_exc())
                     else:
                         st.error(f"Le modèle de traduction pour {nom_langue_source_affichee} ({code_langue_source}) vers {langue_cible_selectionnee_affichage} ({code_langue_cible}) n'a pas pu être chargé. Ce couple de langues n'est peut-être pas disponible.")
-            elif texte_a_traduire: # Si du texte est présent mais code_langue_source est None
-                # Le message d'erreur ou d'avertissement de langue_detectee_placeholder est déjà affiché
-                # Donc, pas besoin d'un autre message ici, sauf si on veut être plus explicite.
-                # st.error("La traduction ne peut pas continuer car la langue source n'a pas été correctement identifiée ou supportée.")
+            elif texte_a_traduire:
                 pass
 
         else:
@@ -188,10 +177,7 @@ with col2:
 
 # --- Pied de Page (Footer) ---
 st.markdown("---") 
-st.markdown(f"""
-<div style="text-align: center; padding: 10px; font-size: 0.9em;">
-    <p style="margin-bottom: 2px;">Projet 3 - End-to-End Deep Learning - Binôme 7</p>
-    <p style="margin-bottom: 2px;">Réalisé par : <strong>Israe EL GHIOUAN</strong> & <strong>Abdessamad BENCHERAIK</strong></p>
-    <p><a href="[VOTRE_LIEN_GITHUB_ICI]" target="_blank">Voir le code source sur GitHub</a></p>
-</div>
-""", unsafe_allow_html=True)
+
+st.caption("Projet 3 - End-to-End Deep Learning - Binôme 7")
+st.caption(f"Réalisé par : **Israe EL GHIOUAN** & **Abdessamad BENCHERAIK**")
+st.markdown(f'<p style="font-size: 0.9em; text-align: center;"><a href="[VOTRE_LIEN_GITHUB_ICI]" target="_blank">Voir le code source sur GitHub</a></p>', unsafe_allow_html=True)
