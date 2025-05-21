@@ -37,43 +37,6 @@ Application web Streamlit permettant aux utilisateurs de résumer des textes et 
 <!-- ![Traduction Effectuée](images/screenshot_translation.png) -->
 *Décommentez et remplacez par votre capture d'écran*
 
-
-## Installation et Exécution
-1. **Cloner le dépôt :**
-   ```bash
-   git clone https://github.com/username/text-processor-app.git
-   cd text-processor-app
-
-1.  **Cloner le dépôt (si ce n'est pas déjà fait) :**
-    ```bash
-    git clone [URL_DE_VOTRE_DEPOT_GITHUB_ICI]
-    cd nom-du-dossier-du-projet
-    ```
-
-2.  **Créer et activer un environnement virtuel (recommandé avec Python 3.12) :**
-    ```bash
-    # Assurez-vous que py -3.12 (ou python3.12) pointe vers votre installation Python 3.12
-    py -3.12 -m venv venv312 
-    ```
-
-    Changer les regles d'éxecution :
-    *   `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process`
-
-    Activer l'environnement :
-    *   Windows (PowerShell) : `.\venv312\Scripts\activate`
-    *   macOS/Linux : `source ./venv312/bin/activate`
-
-3.  **Installer les dépendances :**
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4.  **Exécuter l'application Streamlit :**
-    ```bash
-    streamlit run app.py
-    ```
-    L'application devrait s'ouvrir dans votre navigateur web à l'adresse `http://localhost:8501`.
-
 ## Bibliothèques Principales Utilisées
 
 *   **Streamlit :** Pour la création de l'interface web.
