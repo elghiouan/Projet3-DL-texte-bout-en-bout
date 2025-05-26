@@ -18,11 +18,11 @@ Application web Streamlit permettant aux utilisateurs de résumer des textes et 
 ## Livrables
 - **Démo fonctionnelle** : [Lien vers l'application Streamlit déployée](https://projet3-dl-texte-bout-en-bout.streamlit.app/)
 - **Google Drive** contenant :
-  1. Document Word ( pages)
-  2. Vidéo de présentation ( minutes) : [Lien](https://drive.google.com/file/d/1abcXYZ123)
+  1. Document Word (10 pages)
+  2. Vidéo de présentation : [Lien](https://drive.google.com/file/d/1abcXYZ123)
   3. Ce dépôt GitHub avec code source et documentation
   
-  **Lien Google Drive** : [https://drive.google.com/drive/folders/1xYZ123ABC](https://drive.google.com/drive/folders/1xYZ123ABC)
+  **Lien Google Drive** : [https://drive.google.com/drive/folders/1ZdeXrUrVlXL4h2A4Rqx2kF1PKPpwocAx](https://drive.google.com/drive/folders/1ZdeXrUrVlXL4h2A4Rqx2kF1PKPpwocAx)
 
 ## Captures d'Écran
 
